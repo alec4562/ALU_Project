@@ -1,0 +1,12 @@
+
+/**
+ * 16-bit Set gate: for i = 0..15: out[i] = 1
+ */
+
+CHIP Set16 {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+    Or16(a=in, b=true, out=out);
+}

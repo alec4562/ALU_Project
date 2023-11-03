@@ -1,0 +1,16 @@
+/**
+ * 16-way demultiplexor.  
+ */
+
+
+CHIP DMux16Way {
+    IN in, sel[4];
+    OUT out[16];
+
+    PARTS:
+    DMux4Way(in=in, sel[0]=sel[2], sel[1]=sel[3], a=c1, b=c2, c=c3, d=c4);
+    DMux4Way(in=c1, sel[0]=sel[0], sel[1]=sel[1], a=out[0], b=out[1], c=out[2], d=out[3]);
+    DMux4Way(in=c2, sel[0]=sel[0], sel[1]=sel[1], a=out[4], b=out[5], c=out[6], d=out[7]);
+	DMux4Way(in=c3, sel[0]=sel[0], sel[1]=sel[1], a=out[8], b=out[9], c=out[10], d=out[11]);
+    DMux4Way(in=c4, sel[0]=sel[0], sel[1]=sel[1], a=out[12], b=out[13], c=out[14], d=out[15]);
+}

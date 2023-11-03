@@ -1,0 +1,30 @@
+CHIP ExtendALU{
+     IN x[16],y[16],instruction[10];
+     OUT out[16],zr,ng;
+     
+     PARTS:
+     // If instruction[7..8] equals 1 the the output is exactly as the ALU
+     ALU(x=x, y=y, zx=instruction[5], nx=instruction[4], zy=instruction[3], ny=instruction[2], f=instruction[1], no=instruction[0], out=outALU, zr=zrALU, ng=ngALU);
+     
+     // If instruction[7] equals 0 the output will be x*y and disregard the rest of the instruction.
+	 Xor16(a=x,b=y,out=outXor);
+	 
+	 DMux16Way(in=true,sel=y[0..3], out=set);
+	 SetBit(in=x,set=set,out=outSetBit);
+	 ClrBit(in=x,set=set,out=outClrBit);
+
+	// if instruction[9] we transform shifting into rotate by keeping the MSB/LSB
+     Ror16(in=x, rotate=instruction[9], out=rotateRightX);
+     Rol16(in=x, rotate=instruction[9], out=rotateLeftX);
+
+     Mux4Way16(a=rotateRightX, b=rotateLeftX, c=outSetBit, d=outClrBit, sel=instruction[4..5], out=outExtend);
+
+     // 1 if (out<0),  0 otherwise
+     Mux4Way16(a=outXor, b=outExtend, c=outExtend, d=outALU, sel=instruction[7..8], out[15]=ng, out[0..7]=orA, out[8..15]=orB, out=out);
+
+     // sets zr to 1 if (out==0), 0 otherwise
+     Or8Way(in=orA, out=orOut1);
+     Or8Way(in=orB, in[7]=false, out=orOut2);
+     Or(a=orOut1, b=orOut2, out=notZr);
+     Not(in=notZr, out=zr);
+}

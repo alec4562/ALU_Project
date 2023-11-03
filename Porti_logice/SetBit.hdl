@@ -1,0 +1,7 @@
+CHIP SetBit {
+    IN in[16], set[16];
+    OUT out[16];
+
+    PARTS:
+    Or16(a=in,b=set,out=out);
+}

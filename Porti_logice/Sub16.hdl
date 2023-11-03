@@ -1,0 +1,15 @@
+
+/*
+ * Substract two 16-bit values.
+ * The most significant carry bit is ignored.
+ */
+
+CHIP Sub16 {
+    IN a[16], b[16];
+    OUT out[16];
+
+    PARTS:
+	Not16(in=b,out=bneg);
+    Add16(a=bneg,b=a,out=outadd);
+	Inc16(in=outadd,out=out);
+}

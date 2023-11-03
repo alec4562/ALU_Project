@@ -1,0 +1,11 @@
+/**
+ * 16-bit Clear gate: for i = 0..15: out[i] = 0
+ */
+
+CHIP Clr16 {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+    And16(a=in, b=false, out=out);
+}
